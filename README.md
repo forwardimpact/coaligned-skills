@@ -1,8 +1,6 @@
 # Co-Aligned Skills
 
-Skills for maintaining the
-[Co-Aligned](https://github.com/forwardimpact/monorepo/blob/main/COALIGNED.md)
-instruction architecture with the `coaligned` CLI.
+Skills for maintaining the [Co-Aligned](https://github.com/forwardimpact/monorepo/blob/main/COALIGNED.md) instruction architecture with the `coaligned` CLI.
 
 ## Install
 
