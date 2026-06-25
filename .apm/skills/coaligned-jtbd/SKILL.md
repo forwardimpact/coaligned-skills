@@ -7,7 +7,7 @@ description: >
   schema or freshness failure.
 license: Apache-2.0
 metadata:
-  version: "0.1.14"
+  version: "0.1.15"
   author: forwardimpact
 ---
 

@@ -1,5 +1,5 @@
 name: coaligned-skills
-version: 0.1.14
+version: 0.1.15
 description: >-
   Skills for maintaining the Co-Aligned instruction architecture — setup, instruction layers, jobs, invariants, and the check suite.
 author: forwardimpact
