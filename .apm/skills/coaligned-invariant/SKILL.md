@@ -7,7 +7,7 @@ description: >
   as a `.coaligned/invariants/*.rules.mjs` module the CLI discovers and runs.
 license: Apache-2.0
 metadata:
-  version: "0.1.16"
+  version: "0.1.17"
   author: forwardimpact
 ---
 
