@@ -11,7 +11,7 @@ metadata:
   author: forwardimpact
 ---
 
-# coaligned-setup
+# Set Up the Co-Aligned Architecture
 
 Stand up the
 [Co-Aligned](https://www.coaligned.team/)
@@ -24,7 +24,13 @@ Run this once per repository. For ongoing work use the sibling skills:
 [coaligned-invariant](../coaligned-invariant/SKILL.md) for custom rules, and
 [coaligned-audit](../coaligned-audit/SKILL.md) for the maintenance loop.
 
-## Procedure
+## When to Use
+
+- A repository has no layered agent instructions yet
+- Adopting the Co-Aligned standard in an existing repository
+- Wiring the `coaligned` checks into a repository's check command and CI
+
+## Checklists
 
 <read_do_checklist goal="Internalize the architecture before scaffolding">
 
@@ -35,7 +41,23 @@ Run this once per repository. For ongoing work use the sibling skills:
 
 </read_do_checklist>
 
-### Step 1 — Decide the jobs structure
+<do_confirm_checklist goal="Verify the architecture stands before committing">
+
+- [ ] `CLAUDE.md`, `CONTRIBUTING.md`, and `JTBD.md` exist and stay within
+      their caps.
+- [ ] `.coaligned/invariants/` exists and holds the `no-conflict-markers`
+      starter rule.
+- [ ] The check is wired into the repository's check command and CI through an
+      invocation a clean runner resolves, with the concrete command in
+      CONTRIBUTING.md.
+- [ ] The wired check passes from a clean checkout, not only from a binary
+      already installed on `PATH`.
+
+</do_confirm_checklist>
+
+## Process
+
+### Step 1: Decide the jobs structure
 
 The jobs layer (L2) has two shapes. Pick by how the repo is packaged, not by
 preference.
@@ -51,7 +73,7 @@ preference.
 When in doubt, choose the static file — fewer moving parts. See
 [references/structure-decision.md](references/structure-decision.md).
 
-### Step 2 — Create the root layers (L1, L2)
+### Step 2: Create the root layers (L1, L2)
 
 Create the auto-loaded identity and on-demand standards files. Keep each within
 its cap (L1 ≤ 192 lines; L2 ≤ 320 lines).
@@ -65,14 +87,33 @@ its cap (L1 ≤ 192 lines; L2 ≤ 320 lines).
 
 Do not restate one file in another. CLAUDE.md orients; CONTRIBUTING.md governs.
 
-### Step 3 — Create the invariant directory
+### Step 3: Create the invariant directory
 
-Create `.coaligned/invariants/`. Leave it empty for now, or add a first rule
-module with coaligned-invariant. The directory is where the repo's own
-declarative checks live; `coaligned invariants` discovers every `*.rules.mjs`
-under it.
+Create `.coaligned/invariants/` and seed it with the starter rule. The
+directory is where the repo's own declarative checks live; `coaligned
+invariants` discovers every `*.rules.mjs` under it, so an empty directory
+enforces nothing and the wired check has nothing to prove.
 
-### Step 4 — Wire the checks into the repository
+Copy the bundled starter rule verbatim so every new repo begins with one live
+invariant:
+
+```sh
+cp .claude/skills/coaligned-setup/assets/no-conflict-markers.rules.mjs \
+   .coaligned/invariants/
+```
+
+[`no-conflict-markers`](assets/no-conflict-markers.rules.mjs) fails any tracked
+file that carries a leftover git merge-conflict marker. It is generic by
+design — language-agnostic, zero-configuration, and firing only on an
+unambiguous defect — so it holds in any consuming repository from the first
+commit. It also proves the pipeline end to end: the directory is discovered, a
+module loads, and a planted marker fails the check.
+
+Add repo-specific rules on top with
+[coaligned-invariant](../coaligned-invariant/SKILL.md); keep or remove the
+starter once the repo has invariants of its own.
+
+### Step 4: Wire the checks into the repository
 
 Wire the check into the repository's check command and CI so every layer, job,
 and invariant is enforced before merge. The CLI exposes four entry points:
@@ -91,7 +132,7 @@ through the repository's package manager — and record that concrete command in
 CONTRIBUTING.md. Use the same command in the lint/check task and the CI job;
 never one that only resolves on a contributor's pre-provisioned machine.
 
-### Step 5 — Verify the bootstrap
+### Step 5: Verify the bootstrap
 
 Verify the wired check the way CI runs it, from a clean dependency resolution. A
 `coaligned` already on your `PATH` masks an invocation that cannot resolve on a
@@ -100,24 +141,9 @@ checkout, not just in your shell. A clean run means the layers fit their caps
 and the jobs validate; fix any finding before committing, routing by subcommand
 the same way [coaligned-audit](../coaligned-audit/SKILL.md) does.
 
-## Done When
-
-<do_confirm_checklist goal="Verify the architecture stands before committing">
-
-- [ ] `CLAUDE.md`, `CONTRIBUTING.md`, and `JTBD.md` exist and stay within
-      their caps.
-- [ ] `.coaligned/invariants/` exists.
-- [ ] The check is wired into the repository's check command and CI through an
-      invocation a clean runner resolves, with the concrete command in
-      CONTRIBUTING.md.
-- [ ] The wired check passes from a clean checkout, not only from a binary
-      already installed on `PATH`.
-
-</do_confirm_checklist>
-
 ## Documentation
 
-- [Co-Aligned Instruction Architecture Standard](https://www.coaligned.team/)
+- [Co-Aligned Instruction Architecture Standard](https://github.com/forwardimpact/monorepo/blob/main/COALIGNED.md)
   — the eight layers, their caps, and the rules that separate them.
 - [libcoaligned README](https://github.com/forwardimpact/monorepo/blob/main/libraries/libcoaligned/README.md)
   — what each `coaligned` subcommand checks.
