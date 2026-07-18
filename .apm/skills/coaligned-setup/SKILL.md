@@ -7,7 +7,7 @@ description: >
   repository so instruction layers, jobs, and invariants stay enforced.
 license: Apache-2.0
 metadata:
-  version: "0.1.17"
+  version: "0.1.18"
   author: forwardimpact
 ---
 
